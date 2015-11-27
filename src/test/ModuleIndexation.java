@@ -24,6 +24,7 @@ public class ModuleIndexation {
 		Connection connexion = null;
 		File input = new File("./documents/CORPUS/D1.html");
 		try {
+			
 		    connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 		    Document doc =Jsoup.parse(input, "UTF-8");
 			Elements elements = doc.getAllElements();
