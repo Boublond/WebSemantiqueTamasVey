@@ -2,6 +2,10 @@ package test;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,10 +14,16 @@ import org.jsoup.select.Elements;
 
 public class ModuleIndexation {
 	public static void main(String[] args) {
-		File input = new File("./documents/CORPUS/D1.html");
+		/* Connexion à la base de données */
 
+		String url = "jdbc:mysql://localhost:3306/la_base";
+		String utilisateur = "user";
+		String motDePasse = "password";
+		Connection connexion = null;
+		File input = new File("./documents/CORPUS/D1.html");
 		try {
-			Document doc =Jsoup.parse(input, "UTF-8");
+		    connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		    Document doc =Jsoup.parse(input, "UTF-8");
 			Elements elements = doc.getAllElements();
 			
 			StringBuilder sb = new StringBuilder();
@@ -28,12 +38,26 @@ public class ModuleIndexation {
 			System.out.println(grosText);
 			String [] texts=grosText.split("\\s+");
 			System.out.println(texts[34]);
+			Statement statement = connexion.createStatement();
+			/* Exécution d'une requête d'écriture */
+			int id =0;
+			for(String mot : texts){
+				int statut = statement.executeUpdate( "INSERT INTO Dico (id, mot, num) VALUES ('"+id+"','"+mot+"','0'" );
+				id ++; 
+			}
 			
-			
+		} catch ( SQLException e ) {
+		    /* Gérer les éventuelles erreurs ici */
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}finally {
+		    if ( connexion != null )
+		        try {
+		        	connexion.close();
+		        } catch ( SQLException ignore ) {
+		        	
+		}
 		}
 	}
-
-}
+	}
