@@ -43,12 +43,11 @@ public class ModuleIndexation {
 			
 			StringTokenizer str = new StringTokenizer(grosText,"[ .,;:\'\"&-]+" );
 			while (str.hasMoreTokens()){
-				if (str.nextToken().equals(" ")){
-					System.out.println(str.nextToken());
-//					int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, num) VALUES ("+id+",'"+str.nextToken()+"',1);" );
-					id ++;	
+				if(!str.nextToken().equals(" ")){
+				System.out.println(str.nextToken());
+//				int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, num) VALUES ("+id+",'"+str.nextToken()+"',1);" );
+				id ++;
 				}
-
 			}
 			
 //			String [] texts=grosText.split("[ .,;:\'\"\\s+]");
@@ -62,7 +61,7 @@ public class ModuleIndexation {
 			
 		} catch ( SQLException e ) {
 			e.printStackTrace();
-		     //Gérer les éventuelles erreurs ici 
+		 //    Gérer les éventuelles erreurs ici 
 		} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
