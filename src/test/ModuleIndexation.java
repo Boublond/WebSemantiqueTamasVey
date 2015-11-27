@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ModuleIndexation {
+
 	public static void main(String[] args) {
 		/* Connexion à la base de données */
 
@@ -39,11 +40,15 @@ public class ModuleIndexation {
 			System.out.println(grosText);
 			Statement statement = connexion.createStatement();
 			int id =0;
-			StringTokenizer str = new StringTokenizer(grosText);
+			
+			StringTokenizer str = new StringTokenizer(grosText,"[ .,;:\'\"&-]+" );
 			while (str.hasMoreTokens()){
-				System.out.println(str.nextToken());
-//				int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, num) VALUES ("+id+",'"+str.nextToken()+"',1);" );
-				id ++;
+				if (str.nextToken().equals(" ")){
+					System.out.println(str.nextToken());
+//					int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, num) VALUES ("+id+",'"+str.nextToken()+"',1);" );
+					id ++;	
+				}
+
 			}
 			
 //			String [] texts=grosText.split("[ .,;:\'\"\\s+]");
@@ -57,7 +62,7 @@ public class ModuleIndexation {
 			
 		} catch ( SQLException e ) {
 			e.printStackTrace();
-		    /* Gérer les éventuelles erreurs ici */
+		     //Gérer les éventuelles erreurs ici 
 		} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
