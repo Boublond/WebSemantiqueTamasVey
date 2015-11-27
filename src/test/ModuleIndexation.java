@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.StringTokenizer;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,17 +37,26 @@ public class ModuleIndexation {
 			
 			String grosText = sb.toString();
 			System.out.println(grosText);
-			String [] texts=grosText.split("\\s+");
-			System.out.println(texts[34]);
 			Statement statement = connexion.createStatement();
-			/* Exécution d'une requête d'écriture */
 			int id =0;
-			for(String mot : texts){
-				int statut = statement.executeUpdate( "INSERT INTO Dico (id, mot, num) VALUES ('"+id+"','"+mot+"','0'" );
-				id ++; 
+			StringTokenizer str = new StringTokenizer(grosText);
+			while (str.hasMoreTokens()){
+				System.out.println(str.nextToken());
+//				int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, num) VALUES ("+id+",'"+str.nextToken()+"',1);" );
+				id ++;
 			}
 			
+//			String [] texts=grosText.split("[ .,;:\'\"\\s+]");
+//			System.out.println(texts[34]);
+			
+			/* Exécution d'une requête d'écriture */
+			
+//			for(String mot : texts){
+//				 
+//			}
+			
 		} catch ( SQLException e ) {
+			e.printStackTrace();
 		    /* Gérer les éventuelles erreurs ici */
 		} catch (IOException e) {
 		// TODO Auto-generated catch block
