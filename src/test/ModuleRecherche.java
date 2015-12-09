@@ -68,7 +68,10 @@ public class ModuleRecherche {
 	
 	
 	public static void main(String[] args) {
-		lireRequete("Q1");
+		String [] requeteWords=lireRequete("Q1");
+		for (int i=0;i<requeteWords.length;i++){
+			String mot = requeteWords[i];
+		}
 
 	}
 }
