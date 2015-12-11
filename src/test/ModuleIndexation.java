@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
 public class ModuleIndexation {
 
 	public static void main(String[] args) {
-		//Connexion base de donnée
+		//Connexion base de donnï¿½e
 		String url = "jdbc:mysql://localhost:3306/la_base";
 		String utilisateur = "user";
 		String motDePasse = "password";
@@ -38,8 +38,8 @@ public class ModuleIndexation {
 
 				connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 				Document doc =Jsoup.parse(input, "UTF-8");
+	
 				Elements elements = doc.getAllElements();
-
 				StringBuilder sb = new StringBuilder();
 				for (Element e:elements){
 					if (!e.tagName().equals("script") || e.tagName().equals("style")){

@@ -37,7 +37,7 @@ public class ModuleRecherche {
 
 	}
 
-	public static void CountWord (String mot) {
+	public static void CountWord (String mot, String document) {
 		String url = "jdbc:mysql://localhost:3306/la_base";
 		String utilisateur = "user";
 		String motDePasse = "password";
@@ -52,15 +52,15 @@ public class ModuleRecherche {
 		try {
 
 			Statement statement = connexion.createStatement();
-			String  query = "SELECT count(mot) as nombre, num FROM dico WHERE mot='"+mot+"' GROUP BY num;";
+			String  query = "SELECT count(mot) as nombre, doc FROM dico WHERE mot='"+mot+"' AND doc='"+document+"';";
 			ResultSet resultat = statement.executeQuery(query );
 			resultat.beforeFirst();
 			while ( resultat.next() ) {
 				
 				int nombreDeMot = resultat.getInt( "nombre" );
-				int idDoc = resultat.getInt( "num" );
-				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+idDoc);
-
+				String doc = resultat.getString("doc");
+				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+doc);
+				
 			}
 			connexion.close();
 
@@ -70,7 +70,10 @@ public class ModuleRecherche {
 		}
 
 	}
-
+	
+	public static void isPertinent(String File){
+		
+	}
 
 	public static void main(String[] args) {
 		String [] requeteWords=lireRequete("Q1");
