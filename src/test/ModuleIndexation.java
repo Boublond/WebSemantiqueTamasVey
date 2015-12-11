@@ -57,7 +57,7 @@ public class ModuleIndexation {
 				while (str.hasMoreTokens()){
 					String nextToken =str.nextToken();
 					if(!nextToken.equals(" ")){
-						int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, num) VALUES ("+id+",'"+nextToken+"',"+number+");" );
+						int statut = statement.executeUpdate( "INSERT INTO dico (id, mot, doc,value) VALUES ("+id+",'"+nextToken+"','"+filesName[i]+"',value);" );
 						id ++;
 					}
 				}
