@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class ModuleRecherche {
 	private static final String path ="./documents/requetes/";
@@ -37,11 +38,12 @@ public class ModuleRecherche {
 
 	}
 
-	public static void CountWord (String mot, String document) {
+	public static int CountWord (String mot, String document) {
 		String url = "jdbc:mysql://localhost:3306/la_base";
 		String utilisateur = "user";
 		String motDePasse = "password";
 		Connection connexion = null;
+		int nombreDeMot = 0;
 		try {
 			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 		} catch (SQLException e) {
@@ -52,38 +54,53 @@ public class ModuleRecherche {
 		try {
 
 			Statement statement = connexion.createStatement();
-			String  query = "SELECT count(mot) as nombre, doc FROM dico WHERE mot='"+mot+"' AND doc='"+document+"';";
+			String  query = "SELECT count(mot) as nombre FROM dico WHERE mot='"+mot+"' AND doc='"+document+"';";
 			ResultSet resultat = statement.executeQuery(query );
 			resultat.beforeFirst();
 			while ( resultat.next() ) {
 				
-				int nombreDeMot = resultat.getInt( "nombre" );
-				String doc = resultat.getString("doc");
-				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+doc);
+				nombreDeMot = resultat.getInt( "nombre" );
+				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
 				
 			}
 			connexion.close();
 
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return nombreDeMot;
 
 	}
 	
-	public static void isPertinent(String File){
-		
+	public static float isPertinent(String file, String [] requeteWords){
+		float isPertinent = 1.0f; 
+		ArrayList<Integer> nombreOcurenceParMot = new ArrayList<Integer>() ; 
+		for (int i=0;i<requeteWords.length;i++){
+			String mot = requeteWords[i];
+			System.out.println(mot);
+			nombreOcurenceParMot.add(CountWord(mot, file));
+		}
+		for (int nb : nombreOcurenceParMot){
+			if (nb ==0){
+				isPertinent = 0.0f;
+				break;
+			}else if (nb<5){
+				isPertinent = 0.5f;
+			}
+		}
+		return isPertinent; 
 	}
 
 	public static void main(String[] args) {
 		String [] requeteWords=lireRequete("Q1");
-		for (int i=0;i<requeteWords.length;i++){
-			String mot = requeteWords[i];
-			System.out.println(mot);
-			CountWord(mot);
-
+		File folder = new File("./documents/CORPUS/");
+		String []filesName=folder.list();
+		for (int i=0;i<filesName.length;i++){
+			float pertinent = isPertinent(filesName[i], requeteWords);
+			Document doc = new Document (pertinent, filesName[i]);
 		}
-
 	}
 }
 
