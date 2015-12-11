@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class ModuleRecherche {
 	private static final String path ="./documents/requetes/";
@@ -26,7 +29,7 @@ public class ModuleRecherche {
 				line = br.readLine();
 			}
 			String everything = sb.toString();
-			System.out.println(everything);
+//			System.out.println(everything);
 			br.close();
 			
 			return everything.split(", ");
@@ -60,7 +63,7 @@ public class ModuleRecherche {
 			while ( resultat.next() ) {
 				
 				nombreDeMot = resultat.getInt( "nombre" );
-				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
+//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
 				
 			}
 			connexion.close();
@@ -79,7 +82,7 @@ public class ModuleRecherche {
 		ArrayList<Integer> nombreOcurenceParMot = new ArrayList<Integer>() ; 
 		for (int i=0;i<requeteWords.length;i++){
 			String mot = requeteWords[i];
-			System.out.println(mot);
+//			System.out.println(mot);
 			nombreOcurenceParMot.add(CountWord(mot, file));
 		}
 		for (int nb : nombreOcurenceParMot){
@@ -97,9 +100,16 @@ public class ModuleRecherche {
 		String [] requeteWords=lireRequete("Q1");
 		File folder = new File("./documents/CORPUS/");
 		String []filesName=folder.list();
+		List<Document> listDoc = new ArrayList<Document>();
 		for (int i=0;i<filesName.length;i++){
 			float pertinent = isPertinent(filesName[i], requeteWords);
-			Document doc = new Document (pertinent, filesName[i]);
+			listDoc.add(new Document (pertinent, filesName[i]));
+		}
+		
+		Collections.sort(listDoc);
+		
+		for(Document d:listDoc){
+			System.out.println(d);
 		}
 	}
 }
