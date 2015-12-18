@@ -55,6 +55,12 @@ public class ModuleEvaluation {
 		}	
 		return null;
 	}
+	
+	
+	private static int evaluer(List<Document> maListe,List<Document> laBonneListe,int criter){
+		
+		return 0;
+	}
 
 	private static float parseFloat(String s){
 		if (s.equals("0")){
