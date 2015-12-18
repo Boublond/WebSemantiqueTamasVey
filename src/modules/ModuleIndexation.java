@@ -1,4 +1,4 @@
-package test;
+package modules;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +15,19 @@ import org.jsoup.select.Elements;
 
 public class ModuleIndexation {
 
-	public static void main(String[] args) {
-		//Connexion base de donnï¿½e
-		String url = "jdbc:mysql://localhost:3306/la_base";
-		String utilisateur = "user";
-		String motDePasse = "password";
-		Connection connexion = null;
+	private final static String url = "jdbc:mysql://localhost:3306/la_base";
+	private final static String utilisateur = "user";
+	private final static String motDePasse = "password";
+
+	public static Connection connexion;
+
+
+
+	
+	//TODO insérer les nom des balises dans la base/ retirer les determinants et mots inutiles 
+	public static void indexSimple(){
+
+
 		int id =0;
 
 		//
@@ -38,12 +45,13 @@ public class ModuleIndexation {
 
 				connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 				Document doc =Jsoup.parse(input, "UTF-8");
-	
+
 				Elements elements = doc.getAllElements();
 				StringBuilder sb = new StringBuilder();
 				for (Element e:elements){
 					if (!e.tagName().equals("script") || e.tagName().equals("style")){
 						sb.append(" "+e.text());
+						System.out.println(e.nodeName());
 					} 
 
 				}
@@ -51,7 +59,7 @@ public class ModuleIndexation {
 				String grosText = sb.toString();
 				//System.out.println(grosText);
 				Statement statement = connexion.createStatement();
-				
+
 
 				StringTokenizer str = new StringTokenizer(grosText,"[ .,;:\'\"&-]+" );
 				while (str.hasMoreTokens()){
@@ -86,5 +94,18 @@ public class ModuleIndexation {
 					}
 			}
 		}
+	}
+
+	//TODO compléter cette fonction
+	public void indexTronc7(){
+
+	}
+
+
+
+
+	public static void main(String[] args) {
+
+		indexSimple();
 	}
 }

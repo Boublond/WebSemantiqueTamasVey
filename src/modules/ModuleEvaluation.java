@@ -1,10 +1,12 @@
-package test;
+package modules;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import test.Document;
 
 public class ModuleEvaluation {
 	private static final String path ="documents/qrels/";

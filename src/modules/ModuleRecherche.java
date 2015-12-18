@@ -1,4 +1,4 @@
-package test;
+package modules;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import test.Document;
 
 public class ModuleRecherche {
 	private static final String path ="./documents/requetes/";
