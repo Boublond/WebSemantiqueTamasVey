@@ -4,20 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import data.Document;
 
 public class ModuleEvaluation {
 	private static final String path ="documents/qrels/";
-	
-	
-	private static void test(){
-		
-	}
 
 
-	private static List<Document> genererListe(){
+
+	private static List<Document> genererListe(String name){
 		List<Document> list = new ArrayList<Document>();
 		File folder = new File(path);
 		System.out.println(folder.getAbsolutePath());
@@ -28,28 +25,28 @@ public class ModuleEvaluation {
 		try {
 
 
-			for (String element : filesName) {
-				System.out.println(element);
 
-				br = new BufferedReader(new FileReader(path+element));
-				String line = new String();
+			System.out.println(name);
+
+			br = new BufferedReader(new FileReader(path+name));
+			String line = new String();
 
 
-				while (line != null) {
-					line = br.readLine();
-					System.out.println(line);
-					
-					if (line!=null){
-						String words[] = line.split("\t");
-						list.add(new Document(parseFloat(words[1]), words[0]));
-					}
+			while (line != null) {
+				line = br.readLine();
+				System.out.println(line);
 
+				if (line!=null){
+					String words[] = line.split("\t");
+					list.add(new Document(parseFloat(words[1]), words[0]));
 				}
 
-				br.close();
-
-				return list;
 			}
+
+			br.close();
+
+			return list;
+
 
 
 
@@ -58,7 +55,7 @@ public class ModuleEvaluation {
 		}	
 		return null;
 	}
-	
+
 	private static float parseFloat(String s){
 		if (s.equals("0")){
 			return 0f;
@@ -71,7 +68,8 @@ public class ModuleEvaluation {
 
 
 	public static void main(String[] args) {
-		List<Document> list = genererListe();
+		List<Document> list = genererListe("qrelQ1.txt");
+		Collections.sort(list);
 
 		for(Document d:list){
 			System.out.println(d);

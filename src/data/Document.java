@@ -13,11 +13,11 @@ public class Document implements Comparable<Document> {
 	@Override
 	public int compareTo(Document doc2) {
 		if (this.pertinence<doc2.pertinence){
-			return -1;
+			return 1;
 		} else if (this.pertinence==doc2.pertinence) {
 			return 0;
 		} else {
-			return 1;
+			return -1;
 		}
 		
 	}

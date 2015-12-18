@@ -132,7 +132,7 @@ public class ModuleRecherche {
 	}
 	
 	public static float calculerScore(String docName, String mot){
-		return tf(docName,mot);
+		return Ponderation.tf(docName,mot);
 	}
 	
 	public static float calculerPertinence(){
