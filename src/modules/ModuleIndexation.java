@@ -98,7 +98,7 @@ public class ModuleIndexation {
 
 	//TODO compléter cette fonction
 	public void indexTronc7(){
-
+		
 	}
 
 

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import test.Document;
+import data.Document;
 
 public class ModuleRecherche {
 	private static final String path ="./documents/requetes/";
@@ -31,15 +31,13 @@ public class ModuleRecherche {
 				line = br.readLine();
 			}
 			String everything = sb.toString();
-//			System.out.println(everything);
 			br.close();
-			
+
 			return everything.split(", ");
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 		return null;
-
 
 	}
 
@@ -63,14 +61,14 @@ public class ModuleRecherche {
 			ResultSet resultat = statement.executeQuery(query );
 			resultat.beforeFirst();
 			while ( resultat.next() ) {
-				
+
 				nombreDeMot = resultat.getInt( "nombre" );
-//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
-				
+				//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
+
 			}
 			connexion.close();
 
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,13 +76,13 @@ public class ModuleRecherche {
 		return nombreDeMot;
 
 	}
-	
+
 	public static float isPertinent(String file, String [] requeteWords){
 		float isPertinent = 1.0f; 
 		ArrayList<Integer> nombreOcurenceParMot = new ArrayList<Integer>() ; 
 		for (int i=0;i<requeteWords.length;i++){
 			String mot = requeteWords[i];
-//			System.out.println(mot);
+			//			System.out.println(mot);
 			nombreOcurenceParMot.add(CountWord(mot, file));
 		}
 		for (int nb : nombreOcurenceParMot){
@@ -97,6 +95,10 @@ public class ModuleRecherche {
 		}
 		return isPertinent; 
 	}
+	
+
+	
+	
 
 	public static void main(String[] args) {
 		String [] requeteWords=lireRequete("Q1");
@@ -107,9 +109,9 @@ public class ModuleRecherche {
 			float pertinent = isPertinent(filesName[i], requeteWords);
 			listDoc.add(new Document (pertinent, filesName[i]));
 		}
-		
+
 		Collections.sort(listDoc);
-		
+
 		for(Document d:listDoc){
 			System.out.println(d);
 		}

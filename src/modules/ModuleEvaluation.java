@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import test.Document;
+import data.Document;
 
 public class ModuleEvaluation {
 	private static final String path ="documents/qrels/";

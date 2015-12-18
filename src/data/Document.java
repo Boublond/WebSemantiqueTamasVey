@@ -1,4 +1,4 @@
-package test;
+package data;
 
 public class Document implements Comparable<Document> {
 	private float pertinence;
