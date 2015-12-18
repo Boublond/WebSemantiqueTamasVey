@@ -10,19 +10,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import data.Document;
+import data.Mot;
 
 public class ModuleRecherche {
-	private static final String path ="./documents/requetes/";
+	private static final String pathRequetes ="./documents/requetes/";
+	private static final String pathDocuments="./documents/CORPUS/";
+	
+	
 
+	//Lis une requete et retourne un tableau de String contenant tous les mots de la requete
 	private static String [] lireRequete(String requetename){
 		BufferedReader br;
 
 		try {
-			br = new BufferedReader(new FileReader(path+requetename));
+			br = new BufferedReader(new FileReader(pathRequetes+requetename));
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
 
@@ -96,6 +100,52 @@ public class ModuleRecherche {
 		return isPertinent; 
 	}
 	
+	
+	//Renvoie la liste de documents triés pour une requete donnée
+	public static List<Document> recherche(String [] requete){
+		//Documents dans le dossier
+		File folderDocuments = new File(pathDocuments);
+		String [] fileNames = folderDocuments.list();
+		List<Document> listDoc = new ArrayList<Document>();
+		
+		for (String documentName: fileNames){
+			Document document = new Document(documentName,requete.length);
+			for (int i=0;i<requete.length;i++){
+				document.mots[i].setMot(requete[i]);
+				document.mots[i].setScore(calculerScore(documentName,requete[i]));
+			}
+			
+			document.setPertinence(calculerPertinence());
+			
+			
+		}
+		
+		
+		//On tri la liste
+		Collections.sort(listDoc);
+		
+		return listDoc;
+		
+		
+		
+		
+	}
+	
+	public static float calculerScore(String docName, String mot){
+		return tf(docName,mot);
+	}
+	
+	public static float calculerPertinence(){
+		return 0.0f;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	
 	
@@ -107,7 +157,7 @@ public class ModuleRecherche {
 		List<Document> listDoc = new ArrayList<Document>();
 		for (int i=0;i<filesName.length;i++){
 			float pertinent = isPertinent(filesName[i], requeteWords);
-			listDoc.add(new Document (pertinent, filesName[i]));
+			//listDoc.add(new Document (pertinent, filesName[i]));
 		}
 
 		Collections.sort(listDoc);
