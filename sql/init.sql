@@ -13,5 +13,5 @@ CREATE TABLE dico
     id INT PRIMARY KEY NOT NULL,
     mot VARCHAR(100),
     doc VARCHAR(20),
-    value INT
+    balise VARCHAR(20)
 );
