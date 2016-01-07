@@ -7,17 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Ponderation {
+	static String url = "jdbc:mysql://localhost:3306/la_base";
+	static String utilisateur = "user";
+	static String motDePasse = "password";
+	static Connection connexion = null;
+	
+	
 	
 	public static float tf(String docName,String mot){
-		String url = "jdbc:mysql://localhost:3306/la_base";
-		String utilisateur = "user";
-		String motDePasse = "password";
-		Connection connexion = null;
+
 		int nombreDeMot = 0;
 		try {
 			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -50,6 +52,10 @@ public class Ponderation {
 	}
 	
 	public static float tfNorm(){
+		//Nombre d'occurence du mot dans le document
+		//Divisé par le nombre de mot dans le document
+		
+		
 		return 0.0f;
 	}
 	
@@ -58,6 +64,9 @@ public class Ponderation {
 	}
 	
 	public static float balises(){
+		//Nombre d'occurences du mot en es comptant par balises
+		//Divisé par le nombre 
+		
 		return 0.0f;
 	}
 	

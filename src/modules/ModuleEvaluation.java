@@ -57,9 +57,22 @@ public class ModuleEvaluation {
 	}
 	
 	
-	private static int evaluer(List<Document> maListe,List<Document> laBonneListe,int criter){
-		
-		return 0;
+	private static float evaluer(List<Document> maListe,List<Document> laBonneListe,int criter){
+		float result=0f;
+		for(int i=0;i<criter;i++){
+			Document doc = maListe.get(i);
+			result+=getPertinenceByName(doc.getName(),laBonneListe);	
+		}
+		return result/criter;
+	}
+	
+	private static float getPertinenceByName(String name,List<Document> laBonneListe){
+		for(Document doc:laBonneListe){
+			if(doc.getName().equals(name)){
+				return doc.getPertinence();
+			}
+		}
+		return 0f;
 	}
 
 	private static float parseFloat(String s){
