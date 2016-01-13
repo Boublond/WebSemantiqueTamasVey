@@ -27,7 +27,7 @@ public class TestAlign {
 		AlignmentProcess alignment = new NameEqAlignment();
 		alignment . init ( onto1 , onto2 ) ;
 		alignment . align (null , new Properties () ) ;
-		System . out . println ("Num corresp . générées : " + alignment . nbCells () ) ;
+		System . out . println ("Num corresp . gÃ©nÃ©rÃ©es : " + alignment . nbCells () ) ;
 	}
 
 }
