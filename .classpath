@@ -50,5 +50,6 @@
 	<classpathentry kind="lib" path="lib/slf4j-api.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/owlapi-osgidistribution-4.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
