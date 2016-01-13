@@ -18,6 +18,8 @@ import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -124,7 +126,15 @@ public class Matcher extends URIAlignment {
     	return dataProperties; 
     }
     
-  
+    public static ArrayList<OWLObjectProperty> getObjectProperties(OWLOntology ontology) {
+    	Set<OWLObjectPropertyDomainAxiom> set =ontology.getAxioms(AxiomType.OBJECT_PROPERTY_DOMAIN);
+    	ArrayList<OWLObjectProperty> objectProperties = new ArrayList<OWLObjectProperty>();
+    	for(OWLObjectPropertyDomainAxiom d : set) {
+    		objectProperties.addAll(d.getObjectPropertiesInSignature());
+    	}
+    	
+    	return objectProperties; 
+    }
     
     
      
