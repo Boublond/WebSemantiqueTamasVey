@@ -84,7 +84,7 @@ public class TestAlign {
 	FileNotFoundException , UnsupportedEncodingException , AlignmentException
 	{
 		PrintWriter writer ;
-		FileOutputStream f = new FileOutputStream (new File ("C:/Users/Aurélien/Downloads/align/test"+num+".rdf") ) ;
+		FileOutputStream f = new FileOutputStream (new File ("./alignements/"+num+".rdf") ) ;
 		writer = new PrintWriter ( new BufferedWriter ( new OutputStreamWriter (f ,
 				"UTF-8" )) , true ) ;
 		AlignmentVisitor renderer = new RDFRendererVisitor ( writer ) ;
@@ -95,7 +95,7 @@ public class TestAlign {
 
 	public static void evaluate ( Alignment alignment ) throws URISyntaxException ,
 	AlignmentException {
-		URI reference = new URI ("http://oaei.ontologymatching.org/tests/302/refalign.rdf");
+		URI reference = new URI ("http://oaei.ontologymatching.org/tests/304/refalign.rdf");
 		AlignmentParser aparser = new AlignmentParser (0) ;
 		Alignment refalign = aparser . parse ( reference );
 		PRecEvaluator evaluator = new PRecEvaluator ( refalign , alignment ) ;
