@@ -65,15 +65,29 @@ public class ModuleIndexation {
 
 
 				Document doc =Jsoup.parse(input, "UTF-8");
-
-				Elements elements = doc.getAllElements();
 				StringBuilder sb = new StringBuilder();
+				Elements elements = doc.getAllElements();
 				for (Element e:elements){
 					if (!e.tagName().equals("script") || e.tagName().equals("style")){
-						sb.append(e.text()+"\n");
+						System.out.println("ligne " + sb.toString());
+
+						sb.append((e.text().toLowerCase()));
+						sb = new StringBuilder(sb.toString().replaceAll("[\n\t\b\r]", " "));
+						String text = sb.toString().replaceAll("»|«|[0-9]| alors | au | aucuns | aussi | autre | avant | avec | avoir | bon | car | ce | cela | ces | ceux | chaque | ci | comme | comment | dans | de | des | du | dedans | dehors | depuis | devrait | doit | donc | dos | début | elle | elles | en | encore | essai | est | et | eu | fait | faites | fois | font | hors | ici | il | ils | je | juste | la | le|les | leur | là | ma | maintenant | mais | mes | mine | moins | mon | mot | même | ne | ni | nommés | notre | nos | nous | ok | ou | où | par | parce | pas | peut | peu | plupart | pour | pourquoi | quand | que | quel | quelle | quelles | quels | qui | sa | sans | ses | seulement | si | sien | son | sont | sous | soyez | sujet | sur | ta | tandis | tellement | tels | tes | ton | tous | tout | trop | très | tu | voient | vont | votre | vous | vu | ça | étaient | état | étions | été | être | a | à | l | d | j | m | n | s ", " ");
+						
+						//sb = new StringBuilder(sb.toString().replaceAll("[\n\t\b\r]", " "));
+
+						//sb = new StringBuilder(sb.toString().replaceAll("[ .?!$€,;:\'\"&-]+", " "));
+						//System.out.println("ligne " + text);
+
+						sb = new StringBuilder(sb.toString().replaceAll("»|«|[0-9]| alors | au | aucuns | aussi | autre | avant | avec | avoir | bon | car | ce | cela | ces | ceux | chaque | ci | comme | comment | dans | de | des | du | dedans | dehors | depuis | devrait | doit | donc | dos | début | elle | elles | en | encore | essai | est | et | eu | fait | faites | fois | font | hors | ici | il | ils | je | juste | la | le|les | leur | là | ma | maintenant | mais | mes | mine | moins | mon | mot | même | ne | ni | nommés | notre | nos | nous | ok | ou | où | par | parce | pas | peut | peu | plupart | pour | pourquoi | quand | que | quel | quelle | quelles | quels | qui | sa | sans | ses | seulement | si | sien | son | sont | sous | soyez | sujet | sur | ta | tandis | tellement | tels | tes | ton | tous | tout | trop | très | tu | voient | vont | votre | vous | vu | ça | étaient | état | étions | été | être | a | à | l | d | j | m | n | s ", " "));
+						
+						//sb.append(e.text().toLowerCase()+"\n");
 						//System.out.println(e.nodeName());
-						String text = sb.toString();
-						text= text.toLowerCase();
+						//String text = sb.toString();
+						//System.out.println(text);
+						//sb.toString().toLowerCase();
+/*						text= text.toLowerCase();
 						text = text.replaceAll("[\n\t\b\r]", " ");
 						text = text.replaceAll("»|«|[0-9]| alors | au | aucuns | aussi | autre | avant | avec | avoir | bon | car | ce | cela | ces | ceux | chaque | ci | comme | comment | dans | de | des | du | dedans | dehors | depuis | devrait | doit | donc | dos | début | elle | elles | en | encore | essai | est | et | eu | fait | faites | fois | font | hors | ici | il | ils | je | juste | la | le|les | leur | là | ma | maintenant | mais | mes | mine | moins | mon | mot | même | ne | ni | nommés | notre | nos | nous | ok | ou | où | par | parce | pas | peut | peu | plupart | pour | pourquoi | quand | que | quel | quelle | quelles | quels | qui | sa | sans | ses | seulement | si | sien | son | sont | sous | soyez | sujet | sur | ta | tandis | tellement | tels | tes | ton | tous | tout | trop | très | tu | voient | vont | votre | vous | vu | ça | étaient | état | étions | été | être | a | à | l'| d'| j'| m'| n'|[ .?!$€,;:\'\"&-]+", " ");
 						StringTokenizer str = new StringTokenizer(text);
@@ -88,7 +102,7 @@ public class ModuleIndexation {
 								id ++;
 							}
 						}
-					}
+					}*/
 
 				}
 
@@ -119,7 +133,7 @@ public class ModuleIndexation {
 
 		}
 		closeConnexionToDB();
-		} catch ( SQLException e ) {
+		}} catch ( SQLException e ) {
 			e.printStackTrace();
 			//    Gérer les éventuelles erreurs ici 
 		} catch (IOException e) {
