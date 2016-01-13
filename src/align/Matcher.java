@@ -4,14 +4,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Set;
 
 import org.semanticweb.owl.align.Alignment;
 import org.semanticweb.owl.align.AlignmentException;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -109,6 +113,19 @@ public class Matcher extends URIAlignment {
         }
        	return labels;
     }
+    
+    public static ArrayList<OWLDataProperty> getDataProperties(OWLOntology ontology) {
+    	Set<OWLDataPropertyDomainAxiom> set =ontology.getAxioms(AxiomType.DATA_PROPERTY_DOMAIN);
+    	ArrayList<OWLDataProperty> dataProperties = new ArrayList<OWLDataProperty>();
+    	for(OWLDataPropertyDomainAxiom d : set) {
+    		dataProperties.addAll(d.getDataPropertiesInSignature());
+    	}
+    	
+    	return dataProperties; 
+    }
+    
+  
+    
     
      
     /**
