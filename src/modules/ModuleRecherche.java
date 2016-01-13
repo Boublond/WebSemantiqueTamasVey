@@ -115,13 +115,15 @@ public class ModuleRecherche {
 				document.mots[i].setScore(calculerScore(documentName,requete[i]));
 			}
 			
-			document.setPertinence(calculerPertinence());
+			calculerPertinence(document);
+			
+			
 			
 			
 		}
 		
 		
-		//On tri la liste
+		//On trie la liste
 		Collections.sort(listDoc);
 		
 		return listDoc;
@@ -132,11 +134,15 @@ public class ModuleRecherche {
 	}
 	
 	public static float calculerScore(String docName, String mot){
+		//TODO choisir parmi les différentes méthodes de pondération
 		return Ponderation.tf(docName,mot);
 	}
 	
-	public static float calculerPertinence(){
-		return 0.0f;
+	public static float calculerPertinence(Document doc){
+		//TODO chosir parmi les méthodes de pertinence
+		return 0f;
+		//return Pertinence.cosinus(doc);
+		//return Pertinence.scalaire(doc);
 	}
 	
 	
