@@ -2,8 +2,10 @@ package align;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -28,11 +30,14 @@ import fr.inrialpes.exmo.align.parser.AlignmentParser;
 public class TestAlign {
 	public static void main(String[] args) {
 		try {
-			for (int i=0;i<5;i++){
+			for (int i=0;i<7;i++){
 				AlignmentProcess align = generateAlign(i);
 				render(align,i);
 				evaluate(align);
 			}
+			
+			Alignment a = readFile();
+			evaluate(a);
 			
 
 			
@@ -68,6 +73,10 @@ public class TestAlign {
 		case 4:
 			alignment= new ClassStructAlignment();
 			break;
+		case 5:
+			alignment = new NewMatcher();
+		case 6:
+			alignment = new Matcher();
 		default:
 			alignment = new NameEqAlignment();
 		
@@ -110,5 +119,23 @@ public class TestAlign {
 		
 		return URI;
 	}
+	
+	public static Alignment readFile(){
+		AlignmentParser aparser = new AlignmentParser (0) ;
+		Alignment al;
+		try {
+			File file = new File("C:/Users/Aurélien/Documents/GitHub/WebSemantiqueTamasVey/alignements/logmap2_mappings.rdf");
+			InputStream is = new FileInputStream(file);
+			al = aparser.parse(is);
+			System . out . println ( al . nbCells());
+			return al;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+
 
 }

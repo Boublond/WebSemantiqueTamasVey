@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.semanticweb.owl.align.Alignment;
 import org.semanticweb.owl.align.AlignmentException;
+import org.semanticweb.owl.align.AlignmentProcess;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -29,20 +30,20 @@ import fr.inrialpes.exmo.align.impl.URIAlignment;
 import fr.inrialpes.exmo.ontowrap.OntowrapException;
 
 /**
-** Copyright (C) IRIT, 2015-2016
-**/
-public class Matcher extends URIAlignment {
+ ** Copyright (C) IRIT, 2015-2016
+ **/
+public class Matcher extends URIAlignment implements AlignmentProcess {
 
 	private OWLOntology ontology1;
 	private OWLOntology ontology2;
 
 	private OWLOntologyManager man1;
 	private OWLOntologyManager man2;
-	
+
 	public Matcher() {
-    			 
-        }
-   
+
+	}
+
 	/**
 	 * Initialise the alignment parameters
 	 * @param uri1
@@ -52,10 +53,10 @@ public class Matcher extends URIAlignment {
 	 * @throws OntowrapException
 	 */
 	public void init(URI uri1, URI uri2) throws AlignmentException, OWLOntologyCreationException, OntowrapException {
-		   super.init(uri1, uri2);
-		   load(uri1, uri2);
+		super.init(uri1, uri2);
+		load(uri1, uri2);
 	}
-	
+
 	/**
 	 * Load the ontologies
 	 * @param uri1
@@ -64,95 +65,165 @@ public class Matcher extends URIAlignment {
 	 * @throws AlignmentException
 	 * @throws OntowrapException
 	 */
-    public void load(URI uri1, URI uri2) throws OWLOntologyCreationException, AlignmentException, OntowrapException {
-    	   man1 = OWLManager.createOWLOntologyManager();
-    	   man2 = OWLManager.createOWLOntologyManager();
-	       ontology1 = man1.loadOntologyFromOntologyDocument(IRI.create(uri1));
-	       ontology2 = man2.loadOntologyFromOntologyDocument(IRI.create(uri2));
-     }
-    
-    /**
-     * Generate an alignment (set of correspondences)
-     * @throws AlignmentException 
-     * @throws URISyntaxException 
-     */
-    public void align( Alignment alignment, Properties param )  {
-	       // For the classes : no optmisation cartesian product !
-    	   for ( OWLEntity cl1 : ontology1.getClassesInSignature()){
- 			  	for ( OWLEntity cl2: ontology2.getClassesInSignature() ){
- 			  		   double confidence = match(cl1,cl2);
-				       if (confidence > 0) {
-				    	   try {
-				    		   addAlignCell(cl1.getIRI().toURI(),cl2.getIRI().toURI(),"=", confidence);
-				    	   } catch (Exception e) {
-				    		   System.out.println(e.toString());
-				    	   }
-				  	   }
-			       }
-    	   }
-    	   
-    }
+	public void load(URI uri1, URI uri2) throws OWLOntologyCreationException, AlignmentException, OntowrapException {
+		man1 = OWLManager.createOWLOntologyManager();
+		man2 = OWLManager.createOWLOntologyManager();
+		ontology1 = man1.loadOntologyFromOntologyDocument(IRI.create(uri1));
+		ontology2 = man2.loadOntologyFromOntologyDocument(IRI.create(uri2));
+	}
 
-    /**
-     * Get the labels in lang for a given entity 
-     * @param entity
-     * @param ontology
-     * @param lang
-     * @return
-     */
-    private ArrayList<OWLLiteral> getLabels(OWLEntity entity, OWLOntology ontology, String lang) {
-    	OWLDataFactory df =  OWLManager.createOWLOntologyManager().getOWLDataFactory();
-	    OWLAnnotationProperty label = df.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());	
-		
-    	ArrayList<OWLLiteral> labels = new ArrayList<OWLLiteral>();
-       	for (OWLAnnotation annotation : entity.getAnnotations(ontology, label)) {
-            if (annotation.getValue() instanceof OWLLiteral) {
-                OWLLiteral val = (OWLLiteral) annotation.getValue();
-                if (val.hasLang("en")) {
-                    labels.add(val);
-                }
-            }
-        }
-       	return labels;
-    }
-    
-    public static ArrayList<OWLDataProperty> getDataProperties(OWLOntology ontology) {
-    	Set<OWLDataPropertyDomainAxiom> set =ontology.getAxioms(AxiomType.DATA_PROPERTY_DOMAIN);
-    	ArrayList<OWLDataProperty> dataProperties = new ArrayList<OWLDataProperty>();
-    	for(OWLDataPropertyDomainAxiom d : set) {
-    		dataProperties.addAll(d.getDataPropertiesInSignature());
-    	}
-    	
-    	return dataProperties; 
-    }
-    
-    public static ArrayList<OWLObjectProperty> getObjectProperties(OWLOntology ontology) {
-    	Set<OWLObjectPropertyDomainAxiom> set =ontology.getAxioms(AxiomType.OBJECT_PROPERTY_DOMAIN);
-    	ArrayList<OWLObjectProperty> objectProperties = new ArrayList<OWLObjectProperty>();
-    	for(OWLObjectPropertyDomainAxiom d : set) {
-    		objectProperties.addAll(d.getObjectPropertiesInSignature());
-    	}
-    	
-    	return objectProperties; 
-    }
-    
-    /**
-     * Match two specific ontology entities o1 and o2
-     * @param o1
-     * @param o2
-     * @return
-     */
-    public double match(OWLEntity o1, OWLEntity o2) {
-    	ArrayList<OWLDataProperty> labels1 = getDataProperties(ontology1);
-    	ArrayList<OWLDataProperty> labels2 = getDataProperties(ontology2);
-    	for (OWLDataProperty lit1 : labels1) {
-    		for (OWLDataProperty lit2 : labels2) {
-                 // Comparison based on equality of labels
-    			System.out.println("distance entre les mots : " + LevenshteinDistance.computeLevenshteinDistance(TestAlign.mofidyURI(lit1.toString())
-, TestAlign.mofidyURI(lit2.toString())));
-            }
-    	}
-    	return 0.;
-    }          
-    
+	/**
+	 * Generate an alignment (set of correspondences)
+	 * @throws AlignmentException 
+	 * @throws URISyntaxException 
+	 */
+	public void align( Alignment alignment, Properties param )  {
+		// For the classes : no optmisation cartesian product !
+		for ( OWLEntity cl1 : ontology1.getClassesInSignature()){
+			for ( OWLEntity cl2: ontology2.getClassesInSignature() ){
+				double confidence = match(cl1,cl2);
+				if (confidence > 0) {
+					try {
+						addAlignCell(cl1.getIRI().toURI(),cl2.getIRI().toURI(),"=", confidence);
+					} catch (Exception e) {
+						System.out.println(e.toString());
+					}
+				}
+			}
+		}
+
+
+		for (OWLEntity cl1:getDataProperties(ontology1)){
+			for (OWLEntity cl2:getDataProperties(ontology2)){
+				double confidence = match(cl1,cl2);
+				if (confidence > 0) {
+					try {
+						addAlignCell(cl1.getIRI().toURI(),cl2.getIRI().toURI(),"=", confidence);
+					} catch (Exception e) {
+						System.out.println(e.toString());
+					}
+				}
+			}
+		}
+
+		for (OWLEntity cl1:getObjectProperties(ontology1)){
+			for (OWLEntity cl2:getObjectProperties(ontology2)){
+				double confidence = match(cl1,cl2);
+				if (confidence > 0) {
+					try {
+						addAlignCell(cl1.getIRI().toURI(),cl2.getIRI().toURI(),"=", confidence);
+					} catch (Exception e) {
+						System.out.println(e.toString());
+					}
+				}
+
+			}
+		}
+
+
+
+
+
+
+
+
+	}
+
+	/**
+	 * Get the labels in lang for a given entity 
+	 * @param entity
+	 * @param ontology
+	 * @param lang
+	 * @return
+	 */
+	private ArrayList<OWLLiteral> getLabels(OWLEntity entity, OWLOntology ontology, String lang) {
+		OWLDataFactory df =  OWLManager.createOWLOntologyManager().getOWLDataFactory();
+		OWLAnnotationProperty label = df.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());	
+
+		ArrayList<OWLLiteral> labels = new ArrayList<OWLLiteral>();
+		for (OWLAnnotation annotation : entity.getAnnotations(ontology, label)) {
+			if (annotation.getValue() instanceof OWLLiteral) {
+				OWLLiteral val = (OWLLiteral) annotation.getValue();
+				if (val.hasLang("en")) {
+					labels.add(val);
+				}
+			}
+		}
+		return labels;
+	}
+
+	public static ArrayList<OWLDataProperty> getDataProperties(OWLOntology ontology) {
+		Set<OWLDataPropertyDomainAxiom> set =ontology.getAxioms(AxiomType.DATA_PROPERTY_DOMAIN);
+		ArrayList<OWLDataProperty> dataProperties = new ArrayList<OWLDataProperty>();
+		for(OWLDataPropertyDomainAxiom d : set) {
+			dataProperties.addAll(d.getDataPropertiesInSignature());
+		}
+
+		return dataProperties; 
+	}
+
+	public static ArrayList<OWLObjectProperty> getObjectProperties(OWLOntology ontology) {
+		Set<OWLObjectPropertyDomainAxiom> set =ontology.getAxioms(AxiomType.OBJECT_PROPERTY_DOMAIN);
+		ArrayList<OWLObjectProperty> objectProperties = new ArrayList<OWLObjectProperty>();
+		for(OWLObjectPropertyDomainAxiom d : set) {
+			objectProperties.addAll(d.getObjectPropertiesInSignature());
+		}
+
+		return objectProperties; 
+	}
+
+	/**
+	 * Match two specific ontology entities o1 and o2
+	 * @param o1
+	 * @param o2
+	 * @return
+	 */
+	public double matchData() {
+		ArrayList<OWLDataProperty> labels1 = getDataProperties(ontology1);
+		ArrayList<OWLDataProperty> labels2 = getDataProperties(ontology2);
+		for (OWLDataProperty lit1 : labels1) {
+			for (OWLDataProperty lit2 : labels2) {
+				if (LevenshteinDistance.computeLevenshteinDistance(TestAlign.mofidyURI(lit1.toString())
+						, TestAlign.mofidyURI(lit2.toString()))>0.8){
+					return 1.0;
+				}
+			}
+		}
+		return 0.;
+
+
+	}
+
+	public double matchObject(){
+		ArrayList<OWLObjectProperty> labels1 = getObjectProperties(ontology1);
+		ArrayList<OWLObjectProperty> labels2 = getObjectProperties(ontology2);
+		for (OWLObjectProperty lit1 : labels1) {
+			for (OWLObjectProperty lit2 : labels2) {
+				if (LevenshteinDistance.computeLevenshteinDistance(TestAlign.mofidyURI(lit1.toString())
+						, TestAlign.mofidyURI(lit2.toString()))>0.8){
+					return 1.0;
+				}
+
+			}
+		}
+		return 0.;
+
+	}
+
+
+	public double match(OWLEntity o1, OWLEntity o2) {
+		ArrayList<OWLLiteral> labels1 = getLabels(o1,ontology1,"en");
+		ArrayList<OWLLiteral> labels2 = getLabels(o2,ontology2,"en");
+		for (OWLLiteral lit1 : labels1) {
+			for (OWLLiteral lit2 : labels2) {
+				// Comparison based on equality of labels
+				if (LevenshteinDistance.computeLevenshteinDistance(lit1.getLiteral().toLowerCase(), lit2.getLiteral().toLowerCase())>0.8) { 
+					return 1.0;
+				}
+			}
+		}
+		return 0.;
+	}    
+
+
 }
