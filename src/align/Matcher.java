@@ -136,8 +136,6 @@ public class Matcher extends URIAlignment {
     	return objectProperties; 
     }
     
-    
-     
     /**
      * Match two specific ontology entities o1 and o2
      * @param o1
@@ -145,16 +143,16 @@ public class Matcher extends URIAlignment {
      * @return
      */
     public double match(OWLEntity o1, OWLEntity o2) {
-    	ArrayList<OWLLiteral> labels1 = getLabels(o1,ontology1,"en");
-    	ArrayList<OWLLiteral> labels2 = getLabels(o2,ontology2,"en");
-    	for (OWLLiteral lit1 : labels1) {
-    		for (OWLLiteral lit2 : labels2) {
+    	ArrayList<OWLDataProperty> labels1 = getDataProperties(ontology1);
+    	ArrayList<OWLDataProperty> labels2 = getDataProperties(ontology2);
+    	for (OWLDataProperty lit1 : labels1) {
+    		for (OWLDataProperty lit2 : labels2) {
                  // Comparison based on equality of labels
-    			 if (lit1.getLiteral().toLowerCase().equals(lit2.getLiteral().toLowerCase())) { 
-    				 return 1.0;
-    			 }
+    			System.out.println("distance entre les mots : " + LevenshteinDistance.computeLevenshteinDistance(TestAlign.mofidyURI(lit1.toString())
+, TestAlign.mofidyURI(lit2.toString())));
             }
     	}
     	return 0.;
-    }            
+    }          
+    
 }

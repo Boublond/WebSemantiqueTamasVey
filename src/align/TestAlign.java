@@ -33,6 +33,7 @@ public class TestAlign {
 				render(align,i);
 				evaluate(align);
 			}
+			
 
 			
 		} catch (Exception e) {
@@ -105,7 +106,8 @@ public class TestAlign {
 	}
 
 	public static String mofidyURI (String URI){
-		URI = URI.substring(URI.lastIndexOf("#")+1, URI.length()-1);
+			URI = URI.substring(URI.lastIndexOf("#")+1, URI.length()-1);
+		
 		return URI;
 	}
 
