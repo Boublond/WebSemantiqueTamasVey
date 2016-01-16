@@ -9,7 +9,7 @@ public class Pertinence {
 //	- distance de dice
 //	- distance de jaccard
 
-	
+	//somme des scores
 	public static float scalaire(Document doc){
 		float resultat=0f;
 		
@@ -20,8 +20,17 @@ public class Pertinence {
 		return resultat;
 	}
 	
-	public static float cosinus(Document doc){
-		return 0f;
-	}
+//	public static float dice(Document doc){
+//		// 2 * ps / norme(X) + norme(Y)
+//	}
+//	
+//	
+//	public static float cosinus(Document doc){
+//		// ps /sqrt(norme(x))*sqrt(norme(Y))
+//	}
+//	
+//	public static float jacard(Document doc){
+//		//ps/norme(X) + norme(Y) -PS
+//	}
 
 }
