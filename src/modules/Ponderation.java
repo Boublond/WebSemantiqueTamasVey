@@ -11,12 +11,12 @@ public class Ponderation {
 	static String utilisateur = "user";
 	static String motDePasse = "password";
 	static Connection connexion = null;
-	
-	
-	
+
+
+
 	public static float tf(String docName,String mot){
 
-		int nombreDeMot = 0;
+		int tf = 0;
 		try {
 			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 		} catch (SQLException e) {
@@ -31,7 +31,7 @@ public class Ponderation {
 			resultat.beforeFirst();
 			while ( resultat.next() ) {
 
-				nombreDeMot = resultat.getInt( "nombre" );
+				tf = resultat.getInt( "nombre" );
 				//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
 
 			}
@@ -42,34 +42,123 @@ public class Ponderation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return nombreDeMot;
+		return tf;
+
+	}
+
+
+	public static float TF(String mot,String docName){
+
+		int tf = 0;
+		try {
+			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+
+			Statement statement = connexion.createStatement();
+			String  query = "SELECT count(mot) as nombre FROM dico WHERE mot='"+mot+"' AND doc='"+docName+"';";
+			ResultSet resultat = statement.executeQuery(query );
+			resultat.beforeFirst();
+			while ( resultat.next() ) {
+
+				tf = resultat.getInt( "nombre" );
+				//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
+
+			}
+			connexion.close();
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (tf ==0){
+			return tf;
+		} else {
+			return tf/(1+(float)Math.log(tf));
+		}
+
+	}
+
+
+
+	public static float Robertson(String docName,String mot){
+		int tf = 0;
+		int K =0;
+		try {
+			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+
+			Statement statement = connexion.createStatement();
+			String  query = "SELECT count(mot) as nombre FROM dico WHERE mot='"+mot+"' AND doc='"+docName+"';";
+			ResultSet resultat = statement.executeQuery(query );
+			resultat.beforeFirst();
+			while ( resultat.next() ) {
+
+				tf = resultat.getInt( "nombre" );
+				//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
+
+			}
+			connexion.close();
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
+
+		try {
+			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+
+			Statement statement = connexion.createStatement();
+			String  query = "SELECT count(mot) as nombre FROM dico WHERE doc='"+docName+"';";
+			ResultSet resultat = statement.executeQuery(query );
+			resultat.beforeFirst();
+			while ( resultat.next() ) {
+
+				K = resultat.getInt( "nombre" );
+
+			}
+			connexion.close();
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (K!=0 && tf !=0){
+			return tf/(K+tf);
+		} else {
+			return 0;
+		}
 
 
 	}
-	
-	public static float tfLog(){
-		return 0.0f;
-	}
-	
-	public static float tfNorm(){
-		//Nombre d'occurence du mot dans le document
-		//Divisé par le nombre de mot dans le document
-		
-		
-		return 0.0f;
-	}
-	
-	public static float tfIdf(){
-		return 0.0f;
-	}
-	
+
+
 	public static float balises(){
 		//Nombre d'occurences du mot en es comptant par balises
 		//Divisé par le nombre 
-		
+
 		return 0.0f;
 	}
-	
-	
+
+
 
 }

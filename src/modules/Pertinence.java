@@ -4,7 +4,11 @@ import data.Document;
 import data.Mot;
 
 public class Pertinence {
-	
+//	- distance de produit scalaire
+//	- distance de cosinus
+//	- distance de dice
+//	- distance de jaccard
+
 	
 	public static float scalaire(Document doc){
 		float resultat=0f;
