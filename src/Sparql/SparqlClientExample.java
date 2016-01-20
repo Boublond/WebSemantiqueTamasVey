@@ -1,4 +1,4 @@
-package sparqlclient;
+package Sparql;
 
 import java.util.Map;
 

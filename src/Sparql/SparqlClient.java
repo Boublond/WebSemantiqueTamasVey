@@ -1,4 +1,4 @@
-package sparqlclient;
+package Sparql;
 
 import java.io.IOException;
 import java.net.URI;
