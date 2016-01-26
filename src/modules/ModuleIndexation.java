@@ -88,8 +88,8 @@ public class ModuleIndexation {
 				
 				Elements titles = doc.getElementsByTag("title");
 				for (Element title : titles) {
-					// Récuperer le contenue de href 
-					sb_title.append(title.attr(title.text())+ "\n");	
+					sb_title.append(title.text()+ "\n");
+
 				}
 				
 				Elements metas = doc.getElementsByTag("meta");
@@ -122,7 +122,7 @@ public class ModuleIndexation {
 				for (Element elembody : body) {
 					sb_body.append(elembody.text()+ "\n");								
 				}
-				
+
 				sb_title= new StringBuilder(sb_title.toString().replaceAll("([a-z]|[éèàçù])([A-Z])", "$1 $2"));
 				sb_title=new StringBuilder(sb_title.toString().toLowerCase());
 				sb_title= new StringBuilder(sb_title.toString().replaceAll("[0-9]|&|!|-|<|>|•|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
@@ -152,6 +152,7 @@ public class ModuleIndexation {
 				BufferedReader br = new BufferedReader(new FileReader(stoplist));
 				String line = null;
 				while ((line = br.readLine()) != null) {
+
 					sb_title= new StringBuilder(sb_title.toString().replaceAll(" "+line+ " ", " "));
 					sb_title= new StringBuilder(sb_title.toString().replaceAll(" "+line+"'", " "));
 					
@@ -173,7 +174,6 @@ public class ModuleIndexation {
 				
 				}
 				br.close();
-
 				sb_title= new StringBuilder(sb_title.toString().replaceAll("[ \t\n\b\r\f ]+", "\n"));
 				sb_meta= new StringBuilder(sb_meta.toString().replaceAll("[ \t\n\b\r\f ]+", "\n"));
 				sb_h1= new StringBuilder(sb_h1.toString().replaceAll("[ \t\n\b\r\f ]+", "\n"));
@@ -209,7 +209,7 @@ public class ModuleIndexation {
 						ligne_title = ligne_title.substring(0,7); // On tronque le terme
 						
 					} 
-					if (ligne_title != null && !ligne_title.contains("\\")){
+					if (ligne_title != null){
 						if(ligne_title.length()>1){
 						request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_title+"','"+filesName[i]+"','title');";
 						statut = statement.executeUpdate(request);
@@ -250,7 +250,7 @@ public class ModuleIndexation {
 						ligne_h1 = ligne_h1.substring(0,7); // On tronque le terme
 						
 					} 
-					if (ligne_h1 != null && !ligne_h1.contains("\\")){
+					if (ligne_h1 != null ){
 						if(ligne_h1.length()>1){
 							request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_h1+"','"+filesName[i]+"','h1');";
 							statut = statement.executeUpdate(request);

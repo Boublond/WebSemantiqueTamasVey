@@ -175,6 +175,7 @@ public class Ponderation {
 				if (balise.equals("meta")){
 					count = count +10;
 				}else if (balise.equals("title")){
+					
 					count = count + 20; 
 				}
 				else if (balise.equals("h1")){
