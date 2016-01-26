@@ -84,6 +84,43 @@ public class Ponderation {
 		}
 
 	}
+	
+	public static float tfIDF(String docName,String mot){
+		float tf = tf(docName, mot);
+		int nbDoc = 138;
+		int nb =0;
+		
+		try {
+			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+
+			Statement statement = connexion.createStatement();
+			String  query = "SELECT  distinct doc as nb FROM la_base.dico WHERE mot='"+mot+"';";
+			ResultSet resultat = statement.executeQuery(query );
+			resultat.beforeFirst();
+			
+			while ( resultat.next() ) {
+				nb++;
+				
+
+			}
+			connexion.close();
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return tf * (float)Math.log(nbDoc/nb);
+		
+		
+		
+		
+	}
 
 
 
