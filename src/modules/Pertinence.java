@@ -55,7 +55,7 @@ public class Pertinence {
 		for(Mot mot : doc.mots){
 			resultat+=mot.getScore();
 		}
-		System.out.println(doc.getName()+"  "+resultat);
+		//System.out.println(doc.getName()+"  "+resultat);
 		return resultat;
 	}
 	

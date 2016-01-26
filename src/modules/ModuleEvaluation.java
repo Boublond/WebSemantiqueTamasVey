@@ -17,7 +17,7 @@ public class ModuleEvaluation {
 	public static List<Document> genererListe(String name){
 		List<Document> list = new ArrayList<Document>();
 		File folder = new File(path);
-		System.out.println(folder.getAbsolutePath());
+		//System.out.println(folder.getAbsolutePath());
 		String []filesName=folder.list();
 
 		BufferedReader br;
@@ -26,7 +26,7 @@ public class ModuleEvaluation {
 
 
 
-			System.out.println(name);
+			//System.out.println(name);
 
 			br = new BufferedReader(new FileReader(path+name));
 			String line = new String();
@@ -34,7 +34,7 @@ public class ModuleEvaluation {
 
 			while (line != null) {
 				line = br.readLine();
-				System.out.println(line);
+				//System.out.println(line);
 
 				if (line!=null){
 					String words[] = line.split("\t");
@@ -91,7 +91,7 @@ public class ModuleEvaluation {
 		Collections.sort(list);
 		
 		for(Document d:list){
-			System.out.println(d);
+			//System.out.println(d);
 		}
 	}
 
