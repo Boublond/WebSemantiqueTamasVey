@@ -44,8 +44,10 @@ public class ModuleRecherche {
 			for (String s:tableau){
 				if (s.length()>6){
 					resultat.add(s.substring(0,7));
+					System.out.println(s.substring(0,7));
 				} else {
 					resultat.add(s);
+					System.out.println(s);
 				}
 				
 			}

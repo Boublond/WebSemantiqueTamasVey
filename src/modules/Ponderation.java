@@ -215,15 +215,15 @@ public class Ponderation {
 				String balise = rs.getString("balise");
 				//System.out.println(balise);
 				if (balise.equals("meta")){
-					count = count +10;
+					count = count +20;
 				}else if (balise.equals("title")){
 					
-					count = count + 20; 
+					count = count + 40; 
 				}
 				else if (balise.equals("h1")){
-					count = count +10;
+					count = count +20;
 				}else if (balise.equals("h2")){
-					count = count + 5; 
+					count = count + 10; 
 				}else if (balise.equals("b_or_strong")){
 					count = count + 2; 
 				}else {
