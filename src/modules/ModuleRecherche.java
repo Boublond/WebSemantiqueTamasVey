@@ -101,7 +101,7 @@ public class ModuleRecherche {
 	}
 	
 	
-	//Renvoie la liste de documents triés pour une requete donnée
+	//Renvoie la liste de documents triï¿½s pour une requete donnï¿½e
 	public static List<Document> recherche(String [] requete){
 		//Documents dans le dossier
 		File folderDocuments = new File(pathDocuments);
@@ -117,43 +117,25 @@ public class ModuleRecherche {
 			
 			calculerPertinence(document);
 			
-			
-			
-			
-		}
-		
-		
+		}		
 		//On trie la liste
 		Collections.sort(listDoc);
 		
 		return listDoc;
 		
-		
-		
-		
 	}
 	
 	public static float calculerScore(String docName, String mot){
-		//TODO choisir parmi les différentes méthodes de pondération
+		//TODO choisir parmi les diffï¿½rentes mï¿½thodes de pondï¿½ration
 		return Ponderation.tf(docName,mot);
 	}
 	
 	public static float calculerPertinence(Document doc){
-		//TODO chosir parmi les méthodes de pertinence
+		//TODO chosir parmi les mï¿½thodes de pertinence
 		return 0f;
 		//return Pertinence.cosinus(doc);
 		//return Pertinence.scalaire(doc);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
 	
 
 	public static void main(String[] args) {

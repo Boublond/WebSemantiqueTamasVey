@@ -152,10 +152,35 @@ public class Ponderation {
 	}
 
 
-	public static float balises(){
+	public static float balises(String mot, String docName) throws SQLException{
 		//Nombre d'occurences du mot en es comptant par balises
-		//Divisé par le nombre 
+		//Divisï¿½ par le nombre 
+		int count = 0; 
+		try {
+			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
+		Statement statement;
+		statement = connexion.createStatement();
+		String  query = "SELECT mot, balise FROM dico WHERE mot='"+mot+"' AND doc='"+docName+"';";
+		ResultSet rs = statement.executeQuery(query);
+		while (rs.next()){
+			String balise = rs.getString("balise");
+			if (balise.equals("meta")){
+				count = count +10;
+			}else if (balise.equals("h1")){
+				count = count +5;
+			}else if (balise.equals("h2")){
+				count = count + 3; 
+			}else if (balise.equals("b_or_strong")){
+				count = count + 2; 
+			}else {
+				count++;
+			}
+			
+		}
 		return 0.0f;
 	}
 

@@ -89,7 +89,7 @@ public class ModuleEvaluation {
 	public static void main(String[] args) {
 		List<Document> list = genererListe("qrelQ1.txt");
 		Collections.sort(list);
-
+		
 		for(Document d:list){
 			System.out.println(d);
 		}
