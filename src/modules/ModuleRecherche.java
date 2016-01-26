@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +42,12 @@ public class ModuleRecherche {
 
 			//Avec troncature
 			for (String s:tableau){
-				resultat.add(s.substring(0,7));
+				if (s.length()>6){
+					resultat.add(s.substring(0,7));
+				} else {
+					resultat.add(s);
+				}
+				
 			}
 
 			br.close();
@@ -152,16 +156,19 @@ public class ModuleRecherche {
 
 
 	public static void main(String[] args) {
-		List<String> requeteWords=lireRequete("Q1");
+		int indice = 1;
+		List<String> requeteWords=lireRequete("Q"+indice);
 		System.out.println("La requete :");
 		for(String r:requeteWords){
 			System.out.println(r);
 		}
 		List <Document> listDoc = recherche(requeteWords);
 		
+		List <Document> vraieListe=ModuleEvaluation.genererListe("qrelQ"+indice+".txt");
 		
+		float precision=ModuleEvaluation.evaluer(listDoc, vraieListe, 10);
 
-
+		System.out.println(precision);
 
 	}
 }

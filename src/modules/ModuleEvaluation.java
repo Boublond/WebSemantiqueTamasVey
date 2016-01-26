@@ -14,7 +14,7 @@ public class ModuleEvaluation {
 
 
 
-	private static List<Document> genererListe(String name){
+	public static List<Document> genererListe(String name){
 		List<Document> list = new ArrayList<Document>();
 		File folder = new File(path);
 		System.out.println(folder.getAbsolutePath());
@@ -57,7 +57,7 @@ public class ModuleEvaluation {
 	}
 	
 	
-	private static float evaluer(List<Document> maListe,List<Document> laBonneListe,int criter){
+	public static float evaluer(List<Document> maListe,List<Document> laBonneListe,int criter){
 		float result=0f;
 		for(int i=0;i<criter;i++){
 			Document doc = maListe.get(i);
@@ -66,10 +66,10 @@ public class ModuleEvaluation {
 		return result/criter;
 	}
 	
-	private static float getPertinenceByName(String name,List<Document> laBonneListe){
+	public static float getPertinenceByName(String name,List<Document> laBonneListe){
 		for(Document doc:laBonneListe){
 			if(doc.getName().equals(name)){
-				return doc.getPertinence();
+				return doc.getPertinence()>0.0?1:0;
 			}
 		}
 		return 0f;
