@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,11 +19,11 @@ import data.Mot;
 public class ModuleRecherche {
 	private static final String pathRequetes ="./documents/requetes/";
 	private static final String pathDocuments="./documents/CORPUS/";
-	
-	
+
+
 
 	//Lis une requete et retourne un tableau de String contenant tous les mots de la requete
-	private static String [] lireRequete(String requetename){
+	private static List<String> lireRequete(String requetename){
 		BufferedReader br;
 
 		try {
@@ -35,9 +36,18 @@ public class ModuleRecherche {
 				line = br.readLine();
 			}
 			String everything = sb.toString();
-			br.close();
+			String [] tableau = everything.split(", ");
+			List<String> resultat = new ArrayList<String>();
+			//Sans troncature
+			//resultat=Arrays.asList(tableau);
 
-			return everything.split(", ");
+			//Avec troncature
+			for (String s:tableau){
+				resultat.add(s.substring(0,7));
+			}
+
+			br.close();
+			return resultat;
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
@@ -99,60 +109,60 @@ public class ModuleRecherche {
 		}
 		return isPertinent; 
 	}
-	
-	
+
+
 	//Renvoie la liste de documents tri�s pour une requete donn�e
-	public static List<Document> recherche(String [] requete){
+	public static List<Document> recherche(List<String> requete){
 		//Documents dans le dossier
 		File folderDocuments = new File(pathDocuments);
 		String [] fileNames = folderDocuments.list();
 		List<Document> listDoc = new ArrayList<Document>();
-		
+
 		for (String documentName: fileNames){
-			Document document = new Document(documentName,requete.length);
-			for (int i=0;i<requete.length;i++){
-				document.mots[i].setMot(requete[i]);
-				document.mots[i].setScore(calculerScore(documentName,requete[i]));
+			Document document = new Document(documentName);
+			for (int i=0;i<requete.size();i++){
+				Mot mot = new Mot();
+				String motRequete = requete.get(i);
+				mot.setMot(motRequete);
+				mot.setScore(calculerScore(documentName,motRequete));
+				document.mots.add(mot);
 			}
-			
-			calculerPertinence(document);
-			
+
+			document.setPertinence(calculerPertinence(document));
+			listDoc.add(document);
+
 		}		
 		//On trie la liste
 		Collections.sort(listDoc);
-		
+
 		return listDoc;
-		
+
 	}
-	
+
 	public static float calculerScore(String docName, String mot){
 		//TODO choisir parmi les diff�rentes m�thodes de pond�ration
 		return Ponderation.tf(docName,mot);
 	}
-	
+
 	public static float calculerPertinence(Document doc){
 		//TODO chosir parmi les m�thodes de pertinence
-		return 0f;
 		//return Pertinence.cosinus(doc);
-		//return Pertinence.scalaire(doc);
+		return Pertinence.scalaire(doc);
 	}
-	
+
 
 	public static void main(String[] args) {
-		String [] requeteWords=lireRequete("Q1");
-		File folder = new File("./documents/CORPUS/");
-		String []filesName=folder.list();
-		List<Document> listDoc = new ArrayList<Document>();
-		for (int i=0;i<filesName.length;i++){
-			float pertinent = isPertinent(filesName[i], requeteWords);
-			//listDoc.add(new Document (pertinent, filesName[i]));
+		List<String> requeteWords=lireRequete("Q1");
+		System.out.println("La requete :");
+		for(String r:requeteWords){
+			System.out.println(r);
 		}
+		List <Document> listDoc = recherche(requeteWords);
+		
+		
 
-		Collections.sort(listDoc);
 
-		for(Document d:listDoc){
-			System.out.println(d);
-		}
+
 	}
 }
 

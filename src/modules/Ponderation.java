@@ -32,7 +32,7 @@ public class Ponderation {
 			while ( resultat.next() ) {
 
 				tf = resultat.getInt( "nombre" );
-				//				System.out.println("Il y a " + nombreDeMot + " fois  le mot "+mot+" dans le document "+document);
+				System.out.println("Il y a " + tf + " fois  le mot "+mot+" dans le document "+docName);
 
 			}
 			connexion.close();

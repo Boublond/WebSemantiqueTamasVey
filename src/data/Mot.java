@@ -5,6 +5,8 @@ public class Mot {
 	private String mot;
 	private float score;
 	
+	public Mot(){}
+	
 	public String getMot() {
 		return mot;
 	}

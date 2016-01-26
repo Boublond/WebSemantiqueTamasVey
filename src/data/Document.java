@@ -1,11 +1,14 @@
 package data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Document implements Comparable<Document> {
 	
 	private float pertinence;
 	private String name;
 	
-	public Mot [] mots;
+	public List <Mot> mots;
 	
 	
 	
@@ -26,9 +29,11 @@ public class Document implements Comparable<Document> {
 
 
 
-	public Document(String name,int taille){
+	public Document(String name){
+	
+		
 		this.name=name;
-		this.mots = new Mot[taille];
+		this.mots = new ArrayList<Mot>();
 	}
 	
 	public Document(float pertinence,String name){
