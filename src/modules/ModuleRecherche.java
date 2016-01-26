@@ -35,7 +35,7 @@ public class ModuleRecherche {
 				line = br.readLine();
 			}
 			String everything = sb.toString();
-			String [] tableau = everything.split(", ");
+			String [] tableau = everything.split(", | ");
 			List<String> resultat = new ArrayList<String>();
 			//Sans troncature
 			//resultat=Arrays.asList(tableau);
@@ -169,6 +169,10 @@ public class ModuleRecherche {
 		float precisionMoyenne25=0f;
 		for (int indice=1; indice<9; indice++){
 			List<String> requeteWords=lireRequete("Q"+indice);
+			System.out.println("La requete est :");
+			for (String s:requeteWords){
+				System.out.println(s);
+			}
 
 			List <Document> listDoc = recherche(requeteWords);
 			List <Document> vraieListe=ModuleEvaluation.genererListe("qrelQ"+indice+".txt");

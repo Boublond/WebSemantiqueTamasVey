@@ -115,7 +115,12 @@ public class Ponderation {
 			e.printStackTrace();
 		}
 		
-		return tf * (float)Math.log(nbDoc/nb);
+		if (nb !=0){
+			return tf * (float)Math.log(nbDoc/nb);
+		} else {
+			return tf;
+		}
+		
 		
 		
 		
