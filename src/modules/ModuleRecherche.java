@@ -145,7 +145,8 @@ public class ModuleRecherche {
 
 	public static float calculerScore(String docName, String mot){
 		//TODO choisir parmi les diff�rentes m�thodes de pond�ration
-		return Ponderation.tf(docName,mot);
+		//return Ponderation.tf(docName,mot);
+		return Ponderation.balises(mot, docName);
 	}
 
 	public static float calculerPertinence(Document doc){
@@ -166,7 +167,7 @@ public class ModuleRecherche {
 		
 		List <Document> vraieListe=ModuleEvaluation.genererListe("qrelQ"+indice+".txt");
 		
-		float precision=ModuleEvaluation.evaluer(listDoc, vraieListe, 10);
+		float precision=ModuleEvaluation.evaluer(listDoc, vraieListe, 5);
 
 		System.out.println(precision);
 
