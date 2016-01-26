@@ -132,7 +132,7 @@ public class ModuleRecherche {
 				document.mots.add(mot);
 			}
 
-			document.setPertinence(calculerPertinence(document));
+			document.setPertinence(calculerPertinence(document,requete));
 			listDoc.add(document);
 
 		}		
@@ -149,15 +149,17 @@ public class ModuleRecherche {
 		return Ponderation.balises(mot, docName);
 	}
 
-	public static float calculerPertinence(Document doc){
+	public static float calculerPertinence(Document doc,List<String> requete){
 		//TODO chosir parmi les m�thodes de pertinence
 		//return Pertinence.cosinus(doc);
-		return Pertinence.scalaire(doc);
+//		return Pertinence.scalaire(doc);
+		
+		return Pertinence.cosinus(doc, requete);
 	}
 
 
 	public static void main(String[] args) {
-		int indice = 1;
+		int indice = 3;
 		List<String> requeteWords=lireRequete("Q"+indice);
 		System.out.println("La requete :");
 		for(String r:requeteWords){
