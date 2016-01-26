@@ -33,11 +33,11 @@ public class TestAlign {
 			for (int i=0;i<7;i++){
 				AlignmentProcess align = generateAlign(i);
 				render(align,i);
-				evaluate(align);
+				//evaluate(align);
 			}
 			
 			Alignment a = readFile();
-			evaluate(a);
+			//evaluate(a);
 			
 
 			
@@ -56,8 +56,8 @@ public class TestAlign {
 	public static AlignmentProcess generateAlign (int type) throws URISyntaxException ,AlignmentException {
 		
 		System.out.println(type);
-		URI onto1 = new URI("http://oaei.ontologymatching.org/tests/101/onto.rdf");
-		URI onto2=new URI("http://oaei.ontologymatching.org/tests/304/onto.rdf");
+		URI onto1 = new URI("file:///Users/alexandrevey/git/WebSemantiqueTamasVey/alignements/dbpedia.rdf");
+		URI onto2=new URI("file:///Users/alexandrevey/git/WebSemantiqueTamasVey/alignements/FimographieV1.rdf");
 		AlignmentProcess alignment;
 		
 		switch(type){
@@ -124,7 +124,7 @@ public class TestAlign {
 		AlignmentParser aparser = new AlignmentParser (0) ;
 		Alignment al;
 		try {
-			File file = new File("C:/Users/Aurélien/Documents/GitHub/WebSemantiqueTamasVey/alignements/logmap2_mappings.rdf");
+			File file = new File("/Users/alexandrevey/git/WebSemantiqueTamasVey/alignements/logmap2_mappings.rdf");
 			InputStream is = new FileInputStream(file);
 			al = aparser.parse(is);
 			System . out . println ( al . nbCells());

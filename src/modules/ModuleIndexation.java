@@ -88,7 +88,6 @@ public class ModuleIndexation {
 				for (Element meta : metas) {
 					// Récuperer le contenue de href 
 					sb_meta.append(meta.attr("content")+ "\n");	
-					System.out.println("on recupere chaque href des metas data");
 				}
 				
 				Elements h1 = doc.getElementsByTag("h1");
@@ -118,23 +117,23 @@ public class ModuleIndexation {
 				
 				sb_meta= new StringBuilder(sb_meta.toString().replaceAll("([a-z]|[éèàçù])([A-Z])", "$1 $2"));
 				sb_meta=new StringBuilder(sb_meta.toString().toLowerCase());
-				sb_meta= new StringBuilder(sb_meta.toString().replaceAll("[0-9]|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
+				sb_meta= new StringBuilder(sb_meta.toString().replaceAll("[0-9]|&|!|-|<|>|•|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
 				
 				sb_h1= new StringBuilder(sb_h1.toString().replaceAll("([a-z]|[éèàçù])([A-Z])", "$1 $2"));
 				sb_h1=new StringBuilder(sb_h1.toString().toLowerCase());
-				sb_h1= new StringBuilder(sb_h1.toString().replaceAll("[0-9]|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
+				sb_h1= new StringBuilder(sb_h1.toString().replaceAll("[0-9]|&|!|-|<|>|•|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
 
 				sb_h2= new StringBuilder(sb_h2.toString().replaceAll("([a-z]|[éèàçù])([A-Z])", "$1 $2"));
 				sb_h2=new StringBuilder(sb_h2.toString().toLowerCase());
-				sb_h2= new StringBuilder(sb_h2.toString().replaceAll("[0-9]|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
+				sb_h2= new StringBuilder(sb_h2.toString().replaceAll("[0-9]|&|!|-|<|>|•|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
 
 				sb_b_or_strong= new StringBuilder(sb_b_or_strong.toString().replaceAll("([a-z]|[éèàçù])([A-Z])", "$1 $2"));
 				sb_b_or_strong=new StringBuilder(sb_b_or_strong.toString().toLowerCase());
-				sb_b_or_strong= new StringBuilder(sb_b_or_strong.toString().replaceAll(",|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
+				sb_b_or_strong= new StringBuilder(sb_b_or_strong.toString().replaceAll("&|!|-|<|>|•|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
 
 				sb_body= new StringBuilder(sb_body.toString().replaceAll("([a-z]|[éèàçù])([A-Z])", "$1 $2"));
 				sb_body=new StringBuilder(sb_body.toString().toLowerCase());
-				sb_body= new StringBuilder(sb_body.toString().replaceAll("[0-9]|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
+				sb_body= new StringBuilder(sb_body.toString().replaceAll("[0-9]|&|!|-|<|>|•|,|l'|m'|n'|s'|t'|qu'|c'|d'|l’|m’|n’|s’|t’|qu’|c’|d’|\\.|/|:|;|'|\\[|\\]|»|«|\\(|\\)|\"|\\%|…", " "));
 
 				BufferedReader br = new BufferedReader(new FileReader(stoplist));
 				String line = null;
@@ -190,12 +189,14 @@ public class ModuleIndexation {
 						
 					} 
 					if (ligne_meta != null && !ligne_meta.contains("\\")){
-						System.out.println(ligne_meta);
+						if(ligne_meta.length()>1){
 						request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_meta+"','"+filesName[i]+"','meta');";
 						statut = statement.executeUpdate(request);
 						id++;
+						}
 					}
 				}
+				ips_meta.close();
 				
 				InputStream ips_h1=new FileInputStream("./documents/h1"+i+".txt"); 
 				InputStreamReader ipsr_h1=new InputStreamReader(ips_h1);
@@ -207,15 +208,17 @@ public class ModuleIndexation {
 						ligne_h1 = ligne_h1.substring(0,7); // On tronque le terme
 						
 					} 
-					if (ligne_h1 != null){
-
-					request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_h1+"','"+filesName[i]+"','h1');";
-					statement = connexion.createStatement();
-
-					id++;
+					if (ligne_h1 != null && !ligne_h1.contains("\\")){
+						if(ligne_h1.length()>1){
+							request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_h1+"','"+filesName[i]+"','h1');";
+							statut = statement.executeUpdate(request);
+							id++;
+						}
 					}
 					
 				}
+				ips_h1.close();
+				
 				
 				InputStream ips_h2=new FileInputStream("./documents/h2"+i+".txt"); 
 				InputStreamReader ipsr_h2=new InputStreamReader(ips_h2);
@@ -227,15 +230,17 @@ public class ModuleIndexation {
 						ligne_h2 = ligne_h2.substring(0,7); // On tronque le terme
 						
 					} 
-					System.out.println(ligne_h2);
-					if (ligne_h2 != null|| ligne_h2.contains("'")){
-	
-						request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_h2+"','"+filesName[i]+"','h2');";
-						statement = connexion.createStatement();
-	
-						id++;
+					if (ligne_h2 != null && !ligne_h2.contains("\\")){
+						if(ligne_h2.length()>1){
+							request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_h2+"','"+filesName[i]+"','h2');";
+							statut = statement.executeUpdate(request);
+		
+							id++;
+						}
 					}
 				}
+				ips_h2.close();
+				
 				
 				InputStream ips_b_or_strong=new FileInputStream("./documents/b_or_strong"+i+".txt"); 
 				InputStreamReader ipsr_b_or_strong=new InputStreamReader(ips_b_or_strong);
@@ -247,14 +252,17 @@ public class ModuleIndexation {
 						ligne_b_or_strong = ligne_b_or_strong.substring(0,7); // On tronque le terme
 						
 					} 
-					if (ligne_b_or_strong != null|| ligne_b_or_strong.contains("'")){
-						
+					if (ligne_b_or_strong != null && !ligne_b_or_strong.contains("\\")){
+						if (ligne_b_or_strong.length()>1){
 						request =" INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_b_or_strong+"','"+filesName[i]+"','b_or_strong');";
-						statement = connexion.createStatement();
+						statut = statement.executeUpdate(request);
 	
 						id++;
+						}
 					}
 				}
+				ips_b_or_strong.close();
+				
 				
 				InputStream ips_body=new FileInputStream("./documents/body"+i+".txt"); 
 				InputStreamReader ipsr_body=new InputStreamReader(ips_body);
@@ -266,15 +274,19 @@ public class ModuleIndexation {
 						ligne_body = ligne_body.substring(0,7); // On tronque le terme
 						
 					} 
-					if (ligne_body != null|| ligne_body.contains("'")){
 
-						request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_body+"','"+filesName[i]+"','body');";
-						statement = connexion.createStatement();
-	
-						id++;
-				
+					if (ligne_body != null && !ligne_body.contains("\\")){
+						if(ligne_body.length()>1){
+							request = " INSERT INTO dico (id, mot, doc, balise) VALUES ("+id+",'"+ligne_body+"','"+filesName[i]+"','body');";
+							statut = statement.executeUpdate(request);
+		
+							id++;
+						}
 					}
+					
 				}
+				
+				ips_body.close();
 				System.out.println("fin de l'ajout des mots d'un fichier ");
 				
 		}
