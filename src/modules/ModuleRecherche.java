@@ -146,7 +146,9 @@ public class ModuleRecherche {
 	public static float calculerScore(String docName, String mot){
 		//TODO choisir parmi les diff�rentes m�thodes de pond�ration
 		//return Ponderation.tf(docName,mot);
-		return Ponderation.balises(mot, docName);
+		//return Ponderation.balises(mot, docName);
+		return Ponderation.TF(mot, docName);
+		//return Ponderation.Robertson(docName, mot);
 	}
 
 	public static float calculerPertinence(Document doc){
@@ -157,19 +159,38 @@ public class ModuleRecherche {
 
 
 	public static void main(String[] args) {
-		int indice = 1;
-		List<String> requeteWords=lireRequete("Q"+indice);
-		System.out.println("La requete :");
-		for(String r:requeteWords){
-			System.out.println(r);
-		}
-		List <Document> listDoc = recherche(requeteWords);
-		
-		List <Document> vraieListe=ModuleEvaluation.genererListe("qrelQ"+indice+".txt");
-		
-		float precision=ModuleEvaluation.evaluer(listDoc, vraieListe, 5);
+		//int indice = 3;
+		float precisionMoyenne5=0f;
+		float precisionMoyenne10=0f;
+		float precisionMoyenne25=0f;
+		for (int indice=1; indice<9; indice++){
+			List<String> requeteWords=lireRequete("Q"+indice);
 
-		System.out.println(precision);
+			List <Document> listDoc = recherche(requeteWords);
+			List <Document> vraieListe=ModuleEvaluation.genererListe("qrelQ"+indice+".txt");
+			float precision=ModuleEvaluation.evaluer(listDoc, vraieListe, 5);
+			System.out.println("La précision a 5 pour la requête : "+ indice+ " est de : " +precision);
+			float precision_10=ModuleEvaluation.evaluer(listDoc, vraieListe, 10);
+			System.out.println("La précision a 10 pour la requête : "+ indice+ " est de : " +precision_10);
+			float precision_25=ModuleEvaluation.evaluer(listDoc, vraieListe, 25);
+			System.out.println("La précision a 25 pour la requête : "+ indice+ " est de : " +precision_25);
+
+			precisionMoyenne5 = precisionMoyenne5 + precision;
+			precisionMoyenne10 = precisionMoyenne10 + precision_10;
+			precisionMoyenne25 = precisionMoyenne25 +precision_25;
+			
+			
+		}
+		
+		precisionMoyenne5 = precisionMoyenne5/9;
+		precisionMoyenne10 = precisionMoyenne10/9;
+		precisionMoyenne25 = precisionMoyenne25/9;
+		
+		System.out.println("La précision moyenne a 5 est de : "+precisionMoyenne5);
+		System.out.println("La précision moyenne a 10 est de : "+precisionMoyenne10);		
+		System.out.println("La précision moyenne a 25 est de : "+precisionMoyenne25);
+		
+
 
 	}
 }

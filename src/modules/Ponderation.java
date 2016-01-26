@@ -32,7 +32,7 @@ public class Ponderation {
 			while ( resultat.next() ) {
 
 				tf = resultat.getInt( "nombre" );
-				System.out.println("Il y a " + tf + " fois  le mot "+mot+" dans le document "+docName);
+				//System.out.println("Il y a " + tf + " fois  le mot "+mot+" dans le document "+docName);
 
 			}
 			connexion.close();
@@ -50,7 +50,7 @@ public class Ponderation {
 	public static float TF(String mot,String docName){
 
 		int tf = 0;
-		try {
+		/*try {
 			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,7 +74,8 @@ public class Ponderation {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+		tf = balises(mot, docName);
 
 		if (tf ==0){
 			return tf;
@@ -114,6 +115,7 @@ public class Ponderation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 
 
@@ -152,7 +154,7 @@ public class Ponderation {
 	}
 
 
-	public static float balises(String mot, String docName) {
+	public static int balises(String mot, String docName) {
 		//Nombre d'occurences du mot en es comptant par balises
 		//Divis� par le nombre 
 		int count = 0; 
@@ -169,12 +171,16 @@ public class Ponderation {
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next()){
 				String balise = rs.getString("balise");
+				//System.out.println(balise);
 				if (balise.equals("meta")){
 					count = count +10;
-				}else if (balise.equals("h1")){
-					count = count +5;
+				}else if (balise.equals("title")){
+					count = count + 20; 
+				}
+				else if (balise.equals("h1")){
+					count = count +10;
 				}else if (balise.equals("h2")){
-					count = count + 3; 
+					count = count + 5; 
 				}else if (balise.equals("b_or_strong")){
 					count = count + 2; 
 				}else {
@@ -186,6 +192,13 @@ public class Ponderation {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+		try {
+			connexion.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 		return count;
 	}
