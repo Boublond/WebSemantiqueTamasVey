@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -142,4 +144,92 @@ public class SparqlClient {
             Logger.getLogger(SparqlClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static ArrayList<String> findSynonyme(String mot){
+        ArrayList<String> synonymes = new ArrayList<String>();
+    	SparqlClient sparqlClient = new SparqlClient("localhost:3030/space");
+        String query = "ASK WHERE { ?s ?p ?o }";
+        boolean serverIsUp = sparqlClient.ask(query);
+        if (serverIsUp) {
+            System.out.println("server is UP");
+    	
+    	query = "PREFIX : <http://ontologies.alwaysdata.net/space#>\n"
+                + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                + "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+                + "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+                + "PREFIX lab: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                + "SELECT * WHERE\n"
+                + "{\n"
+                + "    ?subject rdfs:label \""+mot+"\"@fr.\n"
+                + "    ?subject rdfs:label ?label.\n"
+                + "  FILTER (lang(?label) = 'fr').\n"
+                + "  FILTER (str(?label)!=\""+mot+"\").\n"
+
+                + "}\n";
+        Iterable<Map<String, String>> results = sparqlClient.select(query);
+        //System.out.println("nombre de personnes par pièce: "+ results.toString());
+	        for (Map<String, String> result : results) {
+	        	//System.out.println("toto" + result.get("label"));
+	        	System.out.println("retour du get label  "+result.get("label") );
+	        	synonymes.add(result.get("label"));
+	        }
+	        query = "PREFIX : <http://ontologies.alwaysdata.net/space#>\n"
+	                + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+	                + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+	                + "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+	                + "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+	                + "PREFIX lab: <http://www.w3.org/2000/01/rdf-schema#>\n"
+	                + "SELECT * WHERE\n"
+	                + "{\n"
+	                + "    ?subject rdfs:label \""+mot+"\".\n"
+	                + "    ?subject rdfs:label ?label.\n"
+	                + "  FILTER (lang(?label) = 'fr').\n"
+	                + "  FILTER (str(?label)!=\""+mot+"\").\n"
+
+	                + "}\n";
+	        Iterable<Map<String, String>> results2 = sparqlClient.select(query);
+	        //System.out.println("nombre de personnes par pièce: "+ results.toString());
+		        for (Map<String, String> result : results2) {
+		        	//System.out.println("toto" + result.get("label"));
+		        	System.out.println("retour du get label  "+result.get("label") );
+		        	synonymes.add(result.get("label"));
+		        }
+        }
+        return synonymes;
+    } 
+    
+    
+    public static ArrayList<String> getLabel(String mot1, String mot2){
+        ArrayList<String> synonymes = new ArrayList<String>();
+    	SparqlClient sparqlClient = new SparqlClient("localhost:3030/space");
+        String query = "ASK WHERE { ?s ?p ?o }";
+        boolean serverIsUp = sparqlClient.ask(query);
+        if (serverIsUp) {
+            System.out.println("server is UP");
+    	
+    	query = "PREFIX : <http://ontologies.alwaysdata.net/space#>\n"
+                + "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                + "PREFIX owl:  <http://www.w3.org/2002/07/owl#>\n"
+                + "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>\n"
+                + "PREFIX lab: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                + "SELECT ?name WHERE\n"
+                + "{\n"
+                + "    ?omar rdfs:label "+mot1+".\n"
+                + "    ?prop rdfs:label "+mot2+" @fr.\n"
+                + "    ?omar ?prop ?result.\n"
+                + "    ?result rdfs:label ?name.\n"
+                + "}\n";
+        Iterable<Map<String, String>> results = sparqlClient.select(query);
+	        for (Map<String, String> result : results) {
+	        	System.out.println("retour du get label  "+result.get("label") );
+	        	synonymes.add(result.get("result"));
+	        }
+        }
+		return synonymes;
+    }
 }
+    
+    
+

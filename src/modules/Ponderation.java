@@ -49,7 +49,7 @@ public class Ponderation {
 
 	public static float TF(String mot,String docName){
 
-		int tf = 0;
+		float tf = 0;
 		/*try {
 			connexion = DriverManager.getConnection( url, utilisateur, motDePasse );
 		} catch (SQLException e) {
@@ -75,7 +75,7 @@ public class Ponderation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		tf = balises(mot, docName);
+		tf = tf(docName, mot);
 
 		if (tf ==0){
 			return tf;
@@ -215,15 +215,15 @@ public class Ponderation {
 				String balise = rs.getString("balise");
 				//System.out.println(balise);
 				if (balise.equals("meta")){
-					count = count +20;
+					count = count +10;
 				}else if (balise.equals("title")){
 					
-					count = count + 40; 
+					count = count + 10; 
 				}
 				else if (balise.equals("h1")){
-					count = count +20;
+					count = count +5;
 				}else if (balise.equals("h2")){
-					count = count + 10; 
+					count = count + 3; 
 				}else if (balise.equals("b_or_strong")){
 					count = count + 2; 
 				}else {

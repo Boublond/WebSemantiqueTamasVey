@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import Sparql.SparqlClient;
 import data.Document;
 import data.Mot;
 
@@ -42,13 +43,14 @@ public class ModuleRecherche {
 
 			//Avec troncature
 			for (String s:tableau){
-				if (s.length()>6){
+				/*if (s.length()>6){
 					resultat.add(s.substring(0,7));
 					System.out.println(s.substring(0,7));
 				} else {
 					resultat.add(s);
 					System.out.println(s);
-				}
+				}*/
+				resultat.add(s);
 				
 			}
 
@@ -61,6 +63,46 @@ public class ModuleRecherche {
 
 	}
 
+	private static List<String> lireRequeteSparql(String requetename){
+		BufferedReader br;
+
+		try {
+			br = new BufferedReader(new FileReader(pathRequetes+requetename));
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+
+			while (line != null) {
+				sb.append(line);
+				line = br.readLine();
+			}
+			String everything = sb.toString();
+			String [] tableau = everything.split(", ");
+			List<String> resultat = new ArrayList<String>();
+			//Sans troncature
+			//resultat=Arrays.asList(tableau);
+
+			//Avec troncature
+			for (String s:tableau){
+				/*if (s.length()>6){
+					resultat.add(s.substring(0,7));
+					System.out.println(s.substring(0,7));
+				} else {
+					resultat.add(s);
+					System.out.println(s);
+				}*/
+				resultat.add(s);
+				
+			}
+
+			br.close();
+			return resultat;
+		}catch(Exception e){
+			e.printStackTrace();
+		}	
+		return null;
+
+	}
+	
 	public static int CountWord (String mot, String document) {
 		String url = "jdbc:mysql://localhost:3306/la_base";
 		String utilisateur = "user";
@@ -144,20 +186,22 @@ public class ModuleRecherche {
 		return listDoc;
 
 	}
+	
+	
 
 	public static float calculerScore(String docName, String mot){
 		//TODO choisir parmi les diff�rentes m�thodes de pond�ration
 		//return Ponderation.tf(docName,mot);
-		//return Ponderation.balises(mot, docName);
-		return Ponderation.TF(mot, docName);
+		return Ponderation.balises(mot, docName);
+		//return Ponderation.TF(mot, docName);
 		//return Ponderation.Robertson(docName, mot);
 	}
 
 	public static float calculerPertinence(Document doc,List<String> requete){
 		//TODO chosir parmi les m�thodes de pertinence
 		//return Pertinence.cosinus(doc);
-//		return Pertinence.scalaire(doc);
-		
+		//return Pertinence.scalaire(doc);
+		//return Pertinence.jacard(doc, requete);
 		return Pertinence.cosinus(doc, requete);
 	}
 
@@ -169,11 +213,56 @@ public class ModuleRecherche {
 		float precisionMoyenne5=0f;
 		float precisionMoyenne10=0f;
 		float precisionMoyenne25=0f;
-		for (int indice=1; indice<9; indice++){
+		for (int indice=1; indice<=9; indice++){
 			List<String> requeteWords=lireRequete("Q"+indice);
+			List<String> requeteWordsSparql=lireRequeteSparql("Q"+indice);
+			ArrayList<String> synonymes = new ArrayList<String>();
 			System.out.println("La requete est :");
+			List<String> resultat = new ArrayList<String>();
+
+/*			for (String s:requeteWordsSparql){
+				//System.out.println(s);
+				for (String sparql : SparqlClient.findSynonyme(s)){
+					String [] tableau = sparql.split(" ");
+					for (String s2:tableau){
+						if (s2.equals("a")||s2.equals("de")||s2.equals("pour")||s2.equals("est")||s2.contains("/")){
+							System.out.println("suppression d'un terme");
+						}else{
+							resultat.add(sparql);
+						}						}
+
+				}
+				
+			}
+
+			for (String s : resultat){
+				int i = 1; 
+				for(String s2 : requeteWords){
+					if(s.length()>6){
+						s = s.substring(0,7);
+					}
+					if(s2.length()>6){
+						s2 = s2.substring(0,7);
+					}
+					System.out.println("comparaison " + s + "    "+ s2);
+					if (s.equals(s2)){
+						i=0;
+					}
+				}
+				if(i==1){
+					requeteWords.add(s);
+				}
+			}*/
+			
+			ArrayList<String> requeteTronc = new ArrayList<String>();
 			for (String s:requeteWords){
-				System.out.println(s);
+				if (s.length()>6){
+					requeteTronc.add(s.substring(0,7));
+					System.out.println(s.substring(0,7));
+				} else {
+					requeteTronc.add(s);
+					System.out.println(s);
+				}				
 			}
 
 			List <Document> listDoc = recherche(requeteWords);

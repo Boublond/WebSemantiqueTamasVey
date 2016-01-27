@@ -1,5 +1,6 @@
 package Sparql;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SparqlClientExample {
@@ -8,40 +9,9 @@ public class SparqlClientExample {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        SparqlClient sparqlClient = new SparqlClient("192.168.250.91:8080/sparqluedo");
-
-        String query = "ASK WHERE { ?s ?p ?o }";
-        boolean serverIsUp = sparqlClient.ask(query);
-        if (serverIsUp) {
-            System.out.println("server is UP");
-
-            nbPersonnesParPiece(sparqlClient);
-
-            System.out.println("ajout d'une personne dans le bureau:");
-            query = "PREFIX : <http://www.lamaisondumeurtre.fr#>\n"
-                    + "PREFIX instances: <http://www.lamaisondumeurtre.fr/instances#>\n"
-                    + "INSERT DATA\n"
-                    + "{\n"
-                    + "  instances:Bob :personneDansPiece instances:Bureau.\n"
-                    + "}\n";
-            sparqlClient.update(query);
-
-            nbPersonnesParPiece(sparqlClient);
-
-            System.out.println("suppression d'une personne du bureau:");
-            query = "PREFIX : <http://www.lamaisondumeurtre.fr#>\n"
-                    + "PREFIX instances: <http://www.lamaisondumeurtre.fr/instances#>\n"
-                    + "DELETE DATA\n"
-                    + "{\n"
-                    + "  instances:Bob :personneDansPiece instances:Bureau.\n"
-                    + "}\n";
-            sparqlClient.update(query);
-            
-            nbPersonnesParPiece(sparqlClient);
-            
-        } else {
-            System.out.println("service is DOWN");
-        }
+    		String mot = "prix";
+    		ArrayList<String> synonymes = SparqlClient.findSynonyme(mot);
+    		
     }
     
     private static void nbPersonnesParPiece(SparqlClient sparqlClient) {
